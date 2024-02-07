@@ -15,6 +15,7 @@ void menu();
 void showFiles();
 void actions();
 void clearScreen();
+void clearPath();
 
 void menu()
 {
@@ -22,15 +23,16 @@ void menu()
     std::cout << "Welcome to pdfLibrary!\n";
     std::cout << "\n1. Change library path\n";
     std::cout << "2. List all files in library\n";
-    std::cout << "3. Exit the program\n";
+    std::cout << "3. Clear path\n";
+    std::cout << "4. Exit the program\n";
 
     int choice;
 
     std::cout << "\nEnter your choice: ";
 
     while (!(std::cin >> choice)) {
-        std::cin.clear(); // Clear the error flag
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignore the rest of the incorrect input
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         std::cout << "\nInvalid input. Please enter a number: ";
     }
 
@@ -45,6 +47,9 @@ void menu()
             showFiles();
 			break;
         case 3:
+            clearPath();
+			break;
+        case 4:
             std::cout << "\nExiting...\n";
             std::this_thread::sleep_for(std::chrono::seconds(2));
             exit(0);
@@ -52,7 +57,14 @@ void menu()
         default:
             menu();
     }
+}
 
+void clearPath() {
+    currentPath = "";
+    std::ofstream out("path.txt");
+    std::cout << "\nPath cleared successfully.\n";
+    std::this_thread::sleep_for(std::chrono::seconds(2));
+    menu();
 }
 
 void savePathToFile(const std::string& path) {
@@ -87,7 +99,7 @@ void showFiles() {
     filePaths.clear(); 
 
     if (currentPath.empty()) {
-        std::cout << "\nPath has not been set. Please set the path first.\n";
+        std::cout << "Path has not been set. Please set the path first.\n";
         std::this_thread::sleep_for(std::chrono::seconds(2));
         menu();
         return;
